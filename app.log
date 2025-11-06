@@ -1,0 +1,356 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.7)
+
+2025-11-05T18:30:56.938-08:00  INFO 32463 --- [SafePath (H2)] [           main] com.safepath.SafePathApplication         : Starting SafePathApplication v0.0.1-SNAPSHOT using Java 21.0.3 with PID 32463 (/Users/sunminglu/Desktop/SafePath/target/SafePath-0.0.1-SNAPSHOT.jar started by sunminglu in /Users/sunminglu/Desktop/SafePath)
+2025-11-05T18:30:56.939-08:00  INFO 32463 --- [SafePath (H2)] [           main] com.safepath.SafePathApplication         : The following 1 profile is active: "h2"
+2025-11-05T18:30:57.398-08:00  INFO 32463 --- [SafePath (H2)] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-11-05T18:30:57.449-08:00  INFO 32463 --- [SafePath (H2)] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 44 ms. Found 10 JPA repository interfaces.
+2025-11-05T18:30:57.756-08:00  INFO 32463 --- [SafePath (H2)] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-11-05T18:30:57.765-08:00  INFO 32463 --- [SafePath (H2)] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-11-05T18:30:57.766-08:00  INFO 32463 --- [SafePath (H2)] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.48]
+2025-11-05T18:30:57.781-08:00  INFO 32463 --- [SafePath (H2)] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-11-05T18:30:57.782-08:00  INFO 32463 --- [SafePath (H2)] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 815 ms
+2025-11-05T18:30:57.890-08:00  INFO 32463 --- [SafePath (H2)] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-11-05T18:30:57.928-08:00  INFO 32463 --- [SafePath (H2)] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.33.Final
+2025-11-05T18:30:57.947-08:00  INFO 32463 --- [SafePath (H2)] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-11-05T18:30:58.123-08:00  INFO 32463 --- [SafePath (H2)] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-11-05T18:30:58.143-08:00  INFO 32463 --- [SafePath (H2)] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-11-05T18:30:58.279-08:00  INFO 32463 --- [SafePath (H2)] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-11-05T18:30:58.280-08:00  INFO 32463 --- [SafePath (H2)] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-11-05T18:30:58.314-08:00  INFO 32463 --- [SafePath (H2)] [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-11-05T18:30:59.168-08:00  INFO 32463 --- [SafePath (H2)] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+Hibernate: 
+    drop table if exists crime_reports cascade 
+Hibernate: 
+    drop table if exists etl_runs cascade 
+Hibernate: 
+    drop table if exists intersections cascade 
+Hibernate: 
+    drop table if exists offense_types cascade 
+Hibernate: 
+    drop table if exists realtime_incidents cascade 
+Hibernate: 
+    drop table if exists report_offenses cascade 
+Hibernate: 
+    drop table if exists sources cascade 
+Hibernate: 
+    drop table if exists street_segments cascade 
+Hibernate: 
+    drop table if exists user_alerts cascade 
+Hibernate: 
+    drop table if exists users cascade 
+Hibernate: 
+    create table crime_reports (
+        blurred_latitude float(53),
+        blurred_longitude float(53),
+        etl_id integer,
+        report_datetime timestamp(6),
+        beat varchar(10),
+        sector varchar(10),
+        report_number varchar(50) not null,
+        mcpp_neighborhood varchar(100),
+        precinct varchar(100),
+        blurred_address varchar(255),
+        primary key (report_number)
+    )
+Hibernate: 
+    create table etl_runs (
+        etl_id integer generated by default as identity,
+        record_count integer,
+        source_id integer not null,
+        created_at timestamp(6),
+        run_time timestamp(6) not null,
+        primary key (etl_id)
+    )
+Hibernate: 
+    create table intersections (
+        gis_x float(53),
+        gis_y float(53),
+        direction varchar(10),
+        intkey varchar(50) not null,
+        name varchar(100),
+        primary key (intkey)
+    )
+Hibernate: 
+    create table offense_types (
+        group_a_b varchar(1),
+        offense_code varchar(10) not null,
+        crime_against_category varchar(50),
+        offense_name varchar(100) not null,
+        offense_parent_group varchar(100),
+        primary key (offense_code)
+    )
+Hibernate: 
+    create table realtime_incidents (
+        latitude float(53),
+        longitude float(53),
+        source_id integer,
+        event_datetime timestamp(6),
+        incident_id varchar(50) not null,
+        incident_type varchar(100),
+        address varchar(255),
+        report_location varchar(255),
+        primary key (incident_id)
+    )
+Hibernate: 
+    create table report_offenses (
+        etl_id integer,
+        offense_date timestamp(6) not null,
+        offense_end_time timestamp(6),
+        offense_id bigint generated by default as identity,
+        offense_start_time timestamp(6),
+        offense_code varchar(10) not null,
+        report_number varchar(50) not null,
+        primary key (offense_id)
+    )
+Hibernate: 
+    create table sources (
+        refresh_interval integer,
+        source_id integer generated by default as identity,
+        created_at timestamp(6),
+        source_name varchar(255) not null,
+        url varchar(255),
+        primary key (source_id)
+    )
+Hibernate: 
+    create table street_segments (
+        artclass integer,
+        gis_mid_x float(53),
+        gis_mid_y float(53),
+        oneway varchar(1),
+        seglength integer,
+        slope_pct float(53),
+        speedlimit integer,
+        surfacewidth integer,
+        end_intkey varchar(50),
+        flow varchar(50),
+        start_intkey varchar(50),
+        status varchar(50),
+        unitid varchar(50) not null,
+        owner varchar(100),
+        onstreet varchar(255),
+        primary key (unitid)
+    )
+Hibernate: 
+    create table user_alerts (
+        active_flag boolean,
+        alert_id integer generated by default as identity,
+        center_lat float(53),
+        center_lon float(53),
+        radius_m integer,
+        user_id integer not null,
+        created_at timestamp(6),
+        updated_at timestamp(6),
+        crime_type_filter varchar(100),
+        primary key (alert_id)
+    )
+Hibernate: 
+    create table users (
+        user_id integer generated by default as identity,
+        created_at timestamp(6),
+        email varchar(255) not null unique,
+        password_hash varchar(255) not null,
+        primary key (user_id)
+    )
+Hibernate: 
+    alter table if exists crime_reports 
+       add constraint FKd7p6xjrjkv87clw3o2m5yo0jl 
+       foreign key (etl_id) 
+       references etl_runs
+Hibernate: 
+    alter table if exists etl_runs 
+       add constraint FKag2998rcu69jiad8b01ummmq 
+       foreign key (source_id) 
+       references sources
+Hibernate: 
+    alter table if exists realtime_incidents 
+       add constraint FKf7ttkkh6fllwwwoy1tno0v1st 
+       foreign key (source_id) 
+       references sources
+Hibernate: 
+    alter table if exists report_offenses 
+       add constraint FK1io3td5tpsayvwf1cn1apskvv 
+       foreign key (report_number) 
+       references crime_reports
+Hibernate: 
+    alter table if exists report_offenses 
+       add constraint FKcqxha6fiiphlo3o7831r2l72s 
+       foreign key (etl_id) 
+       references etl_runs
+Hibernate: 
+    alter table if exists report_offenses 
+       add constraint FKlv9jb91e3xt2tt8i7y1otq7sd 
+       foreign key (offense_code) 
+       references offense_types
+Hibernate: 
+    alter table if exists street_segments 
+       add constraint FK1t1r03jj11qqw8fvbtr9iyucg 
+       foreign key (end_intkey) 
+       references intersections
+Hibernate: 
+    alter table if exists street_segments 
+       add constraint FK6sf5mvxfgn3vhwp1worlchc2f 
+       foreign key (start_intkey) 
+       references intersections
+Hibernate: 
+    alter table if exists user_alerts 
+       add constraint FKaec2u72jdu2vubrvxa3qdywcf 
+       foreign key (user_id) 
+       references users
+2025-11-05T18:30:59.215-08:00  INFO 32463 --- [SafePath (H2)] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+Hibernate: 
+    insert 
+    into
+        users
+        (created_at, email, password_hash, user_id) 
+    values
+        (?, ?, ?, default)
+Hibernate: 
+    select
+        cr1_0.report_number,
+        cr1_0.beat,
+        cr1_0.blurred_address,
+        cr1_0.blurred_latitude,
+        cr1_0.blurred_longitude,
+        cr1_0.etl_id,
+        cr1_0.mcpp_neighborhood,
+        cr1_0.precinct,
+        cr1_0.report_datetime,
+        cr1_0.sector 
+    from
+        crime_reports cr1_0 
+    where
+        cr1_0.report_number=?
+Hibernate: 
+    insert 
+    into
+        crime_reports
+        (beat, blurred_address, blurred_latitude, blurred_longitude, etl_id, mcpp_neighborhood, precinct, report_datetime, sector, report_number) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    insert 
+    into
+        user_alerts
+        (active_flag, center_lat, center_lon, created_at, crime_type_filter, radius_m, updated_at, user_id, alert_id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, default)
+2025-11-05T18:30:59.616-08:00  WARN 32463 --- [SafePath (H2)] [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-11-05T18:30:59.858-08:00  INFO 32463 --- [SafePath (H2)] [           main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-11-05T18:30:59.936-08:00  INFO 32463 --- [SafePath (H2)] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-11-05T18:30:59.949-08:00  INFO 32463 --- [SafePath (H2)] [           main] com.safepath.SafePathApplication         : Started SafePathApplication in 3.247 seconds (process running for 3.533)
+2025-11-05T18:31:00.434-08:00  INFO 32463 --- [SafePath (H2)] [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-11-05T18:31:00.434-08:00  INFO 32463 --- [SafePath (H2)] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-11-05T18:31:00.435-08:00  INFO 32463 --- [SafePath (H2)] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+Hibernate: 
+    select
+        ua1_0.alert_id,
+        ua1_0.active_flag,
+        ua1_0.center_lat,
+        ua1_0.center_lon,
+        ua1_0.created_at,
+        ua1_0.crime_type_filter,
+        ua1_0.radius_m,
+        ua1_0.updated_at,
+        ua1_0.user_id 
+    from
+        user_alerts ua1_0 
+    left join
+        users u1_0 
+            on u1_0.user_id=ua1_0.user_id 
+    where
+        u1_0.user_id=?
+Exception in thread "http-nio-8080-exec-9" java.lang.NoClassDefFoundError: ch/qos/logback/classic/spi/ThrowableProxy
+	at ch.qos.logback.classic.spi.LoggingEvent.<init>(LoggingEvent.java:145)
+	at ch.qos.logback.classic.Logger.buildLoggingEventAndAppend(Logger.java:424)
+	at ch.qos.logback.classic.Logger.filterAndLog_0_Or3Plus(Logger.java:386)
+	at ch.qos.logback.classic.Logger.log(Logger.java:780)
+	at org.slf4j.bridge.SLF4JBridgeHandler.callLocationAwareLogger(SLF4JBridgeHandler.java:232)
+	at org.slf4j.bridge.SLF4JBridgeHandler.publish(SLF4JBridgeHandler.java:313)
+	at java.logging/java.util.logging.Logger.log(Logger.java:983)
+	at java.logging/java.util.logging.Logger.doLog(Logger.java:1010)
+	at java.logging/java.util.logging.Logger.logp(Logger.java:1287)
+	at org.apache.juli.logging.DirectJDKLog.log(DirectJDKLog.java:170)
+	at org.apache.juli.logging.DirectJDKLog.error(DirectJDKLog.java:141)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1792)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:973)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:491)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.lang.ClassNotFoundException: ch.qos.logback.classic.spi.ThrowableProxy
+	... 17 more
+Exception in thread "http-nio-8080-exec-1" java.lang.NoClassDefFoundError: ch/qos/logback/classic/spi/ThrowableProxy
+	at ch.qos.logback.classic.spi.LoggingEvent.<init>(LoggingEvent.java:145)
+	at ch.qos.logback.classic.Logger.buildLoggingEventAndAppend(Logger.java:424)
+	at ch.qos.logback.classic.Logger.filterAndLog_0_Or3Plus(Logger.java:386)
+	at ch.qos.logback.classic.Logger.log(Logger.java:780)
+	at org.slf4j.bridge.SLF4JBridgeHandler.callLocationAwareLogger(SLF4JBridgeHandler.java:232)
+	at org.slf4j.bridge.SLF4JBridgeHandler.publish(SLF4JBridgeHandler.java:313)
+	at java.logging/java.util.logging.Logger.log(Logger.java:983)
+	at java.logging/java.util.logging.Logger.doLog(Logger.java:1010)
+	at java.logging/java.util.logging.Logger.logp(Logger.java:1287)
+	at org.apache.juli.logging.DirectJDKLog.log(DirectJDKLog.java:170)
+	at org.apache.juli.logging.DirectJDKLog.error(DirectJDKLog.java:141)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1792)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:973)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:491)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.lang.ClassNotFoundException: ch.qos.logback.classic.spi.ThrowableProxy
+	... 17 more
+Exception in thread "http-nio-8080-exec-2" java.lang.NoClassDefFoundError: ch/qos/logback/classic/spi/ThrowableProxy
+	at ch.qos.logback.classic.spi.LoggingEvent.<init>(LoggingEvent.java:145)
+	at ch.qos.logback.classic.Logger.buildLoggingEventAndAppend(Logger.java:424)
+	at ch.qos.logback.classic.Logger.filterAndLog_0_Or3Plus(Logger.java:386)
+	at ch.qos.logback.classic.Logger.log(Logger.java:780)
+	at org.slf4j.bridge.SLF4JBridgeHandler.callLocationAwareLogger(SLF4JBridgeHandler.java:232)
+	at org.slf4j.bridge.SLF4JBridgeHandler.publish(SLF4JBridgeHandler.java:313)
+	at java.logging/java.util.logging.Logger.log(Logger.java:983)
+	at java.logging/java.util.logging.Logger.doLog(Logger.java:1010)
+	at java.logging/java.util.logging.Logger.logp(Logger.java:1287)
+	at org.apache.juli.logging.DirectJDKLog.log(DirectJDKLog.java:170)
+	at org.apache.juli.logging.DirectJDKLog.error(DirectJDKLog.java:141)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1792)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:973)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:491)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.lang.ClassNotFoundException: ch.qos.logback.classic.spi.ThrowableProxy
+	... 17 more
+Exception in thread "http-nio-8080-exec-3" java.lang.NoClassDefFoundError: ch/qos/logback/classic/spi/ThrowableProxy
+	at ch.qos.logback.classic.spi.LoggingEvent.<init>(LoggingEvent.java:145)
+	at ch.qos.logback.classic.Logger.buildLoggingEventAndAppend(Logger.java:424)
+	at ch.qos.logback.classic.Logger.filterAndLog_0_Or3Plus(Logger.java:386)
+	at ch.qos.logback.classic.Logger.log(Logger.java:780)
+	at org.slf4j.bridge.SLF4JBridgeHandler.callLocationAwareLogger(SLF4JBridgeHandler.java:232)
+	at org.slf4j.bridge.SLF4JBridgeHandler.publish(SLF4JBridgeHandler.java:313)
+	at java.logging/java.util.logging.Logger.log(Logger.java:983)
+	at java.logging/java.util.logging.Logger.doLog(Logger.java:1010)
+	at java.logging/java.util.logging.Logger.logp(Logger.java:1287)
+	at org.apache.juli.logging.DirectJDKLog.log(DirectJDKLog.java:170)
+	at org.apache.juli.logging.DirectJDKLog.error(DirectJDKLog.java:141)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1792)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:973)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:491)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.lang.ClassNotFoundException: ch.qos.logback.classic.spi.ThrowableProxy
+	... 17 more
